@@ -1,0 +1,32 @@
+{% include './partials/head.html' %}
+
+    <div class="container mt-5 mb-5">
+        {% if post %}
+            <div class="row">
+                <div class="col col-lg-8 col-md-8 col-sm-12">
+                    <h2>{{ post.title }}</h2>
+                    <p>
+                        <abbr title="Updated at {{ post.updated_date }}">First created at {{ post.pub_date }}</abbr>
+                        -
+                        by {{ post.author }}
+                    </p>
+                    <hr>
+                    <article>
+                        {{ post.content }}
+                    </article>
+                    <section id="author">
+                        <h2>{{ post.author.name }}</h2>
+                    </section>
+                </div>
+                <div class="col col-lg-4 col-md-4 col-sm-12">
+                    <section id="comments">
+                        <h2>Comments</h2>
+                    </section>
+                </div>
+            </div>
+        {% else %}
+            <p>Post not found</p>
+        {% endif %}
+    </div>
+
+{% include './partials/foot.html' %}

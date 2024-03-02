@@ -1,0 +1,20 @@
+{% include './partials/head.html' %}
+
+    <div class="container mt-5 mb-5">
+        <h1>Post list</h1>
+        {% if posts %}
+            {% for post in posts %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ post.title }}</h4>
+                            <p class="card-text">{{ post.description }}</p>
+                            <a class="stretched-link btn btn-primary text-white" href="{% url 'editor:post.view' post.slug %}">View more</a>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no posts.</p>
+        {% endif%}
+    </div>
+
+{% include './partials/foot.html' %}
