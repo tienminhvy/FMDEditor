@@ -1,12 +1,15 @@
 from typing import Any
 from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.views import generic
 
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from .models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout as auth_logout
@@ -31,6 +34,28 @@ class PostIndexView(generic.ListView):
 class PostView(generic.DetailView):
     template_name = 'editor/detail.html'
     model = Post
+
+class PostCreateView(LoginRequiredMixin, generic.CreateView):
+    template_name = 'editor/post/create.html'
+    form_class = PostForm
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+    success_url = '/post/create'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if self.request.GET.get('success') is not None:
+            return render(request, self.template_name, {'form': self.form_class, 'success': True})
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        messages.success(self.request, mark_safe('Post created successfully. <a href="%s">View it</a>'%reverse('editor:post.view', kwargs={'slug': post.slug})))
+        return super().form_valid(form)
+    
+    def form_invalid(self, form: BaseModelForm) -> HttpResponse:\
+        return super().form_invalid(form)
 
 # For login
 
