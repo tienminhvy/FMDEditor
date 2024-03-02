@@ -10,9 +10,9 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
 
     # Post section
-    # path("post/create/", views.Post.create, name="post.create"),
+    path("post/create/", views.PostCreateView.as_view(), name="post.create"),
     path("post/<slug:slug>/", views.PostView.as_view(), name="post.view"),
 
     # User section
-    path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
+    # path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
 ]
