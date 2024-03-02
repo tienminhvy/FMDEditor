@@ -30,7 +30,7 @@ python manage.py createsuperuser
 ```bash
 python manage.py runserver
 ```
-6. Now enter 127.0.0.1:8000 to your browser's address bar and see the magic.
+6. Now enter 127.0.0.1:8000 to your browser's address bar to see the magic.
 # Documentation
 
 # Issues, Bugs & Feature Requests
