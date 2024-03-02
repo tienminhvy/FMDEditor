@@ -35,4 +35,8 @@ python manage.py runserver
 
 # Issues, Bugs & Feature Requests
 
+Just create new issue if you found any problems here: https://github.com/tienminhvy/FMDEditor/issues
+
 # Support & Questions
+
+Need assisstance? Do not hesitate to ask for help at: https://github.com/tienminhvy/FMDEditor/discussions
