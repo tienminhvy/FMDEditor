@@ -1,5 +1,5 @@
 # FMDEditor
-A web app for managing Markdown posts using Django. FMDEditor stands for Fast Mark Down Editor.
+A web app for managing Markdown posts using Django. FMDEditor stands for Fast Markdown Editor.
 
 # Requirement
 
