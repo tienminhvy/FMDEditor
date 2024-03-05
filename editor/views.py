@@ -41,11 +41,6 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
     login_url = '/login/'
     redirect_field_name = 'redirected_to'
     success_url = '/post/create'
-
-    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        if self.request.GET.get('success') is not None:
-            return render(request, self.template_name, {'form': self.form_class, 'success': True})
-        return super().get(request, *args, **kwargs)
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         post = form.save(commit=False)
@@ -53,9 +48,35 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
         post.save()
         messages.success(self.request, mark_safe('Post created successfully. <a href="%s">View it</a>'%reverse('editor:post.view', kwargs={'slug': post.slug})))
         return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name = 'editor/post/update.html'
+    form_class = PostForm
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+    model = Post
+    success_url = '/post/update/'
+
+    def get_success_url(self) -> str:
+        return super().get_success_url() + str(self.kwargs["slug"])
     
-    def form_invalid(self, form: BaseModelForm) -> HttpResponse:\
-        return super().form_invalid(form)
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        messages.success(self.request, mark_safe('Post updated successfully. <a href="%s">View it</a>'%reverse('editor:post.view', kwargs={'slug': post.slug})))
+        return super().form_valid(form)
+    
+class PostDeleteView(LoginRequiredMixin, generic.DeleteView):
+    template_name = 'editor/post/delete.html'
+    model = Post
+    success_url = '/post/create'
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        messages.success(self.request, mark_safe('Post deleted successfully. '))
+        return super().form_valid(form)
 
 # For login
 
