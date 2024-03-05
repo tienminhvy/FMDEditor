@@ -9,7 +9,8 @@ from django.utils import timezone
 # a post model which contains title, slug (created from title), author, description, content, keyword, created date and updated date
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100)
+    #  slug must be unique
+    slug = models.CharField(max_length=100, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=100)
     content = models.TextField()
