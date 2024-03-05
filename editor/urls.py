@@ -17,5 +17,5 @@ urlpatterns = [
     path("post/delete/<slug:slug>/", views.PostDeleteView.as_view(), name="post.delete"),
 
     # User section
-    # path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
+    path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
 ]
