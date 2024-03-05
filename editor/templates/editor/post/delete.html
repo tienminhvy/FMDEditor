@@ -1,0 +1,15 @@
+{% include '../partials/head.html' %}
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+    <div class="container mt-3 mb-5 pb-5">
+        <div class="col">
+            <form action="{% url 'editor:post.delete' post.slug %}" method="POST">
+                <h2>Warning!</h2>
+                {% csrf_token %}
+                Are you sure you want to delete this post? This action is irreversible.
+                <button class="btn btn-danger">Confirm</button>
+            </form>
+        </div>
+    </div>
+{% include '../partials/foot.html' %}

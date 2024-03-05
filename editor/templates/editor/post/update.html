@@ -1,0 +1,86 @@
+{% include '../partials/head.html' %}
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+    <div class="container mt-3 mb-5 pb-5">
+        <div class="col">
+            <form action="{% url 'editor:post.update' post.pk %}" method="POST">
+                {% csrf_token %}
+                {% if form %}
+                    {% if messages %}
+                        <div class="mb-3">
+                            <div class="alert alert-success" role="alert">
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% load widget_tweaks %}
+                    <h2>Update post</h2>
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Title</label>
+                        {% render_field form.title class="form-control" %}
+                    </div>
+                    <!-- Slug -->
+                    <div class="mb-3">
+                        <label for="id_slug" class="form-label">Slug</label>
+                        {% render_field form.slug class="form-control" %}
+                    </div>
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Description</label>
+                        {% render_field form.description class="form-control" %}
+                    </div>
+                    <!-- Keywords -->
+                    <div class="mb-3">
+                        <label for="id_keyword" class="form-label">Keywords</label>
+                        {% render_field form.keyword class="form-control" %}
+                    </div>
+                    <!-- Published date -->
+                    <div class="mb-3">
+                        <label for="id_pub_date" class="form-label">Published date</label>
+                        {% render_field form.pub_date class="form-control" type="datetime-local" %}
+                    </div>
+                    <!-- Content -->
+                    <div class="mb-3">
+                        <label for="editor" class="form-label">Content</label>
+                        <div id="editor"></div>
+                        <input type="hidden" name="content" value="{{ form.content.value | default_if_none:'' }}">
+                    </div>
+
+                    {% if error or form.errors %}
+                        <div class="mb-3">
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                                {{ form.errors }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const Editor = toastui.Editor;
+
+            const editor = new Editor({
+                el: document.querySelector('#editor'),
+                height: '500px',
+                initialValue: document.querySelector("form input[name='content']").value,
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical'
+            });
+
+            document.querySelector("form").addEventListener('submit', e => {
+                e.preventDefault();
+                document.querySelector("form input[name='content']").value = editor.getMarkdown();
+                document.querySelector("form").submit();
+            })
+        })
+    </script>
+{% include '../partials/foot.html' %}
