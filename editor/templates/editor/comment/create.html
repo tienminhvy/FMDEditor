@@ -1,0 +1,24 @@
+<div class="new-comment mb-3 pb-3">
+    {% if request.user.is_authenticated %}
+        {% if form %}
+            <form action="{% url 'editor:comment.create' post.slug %}" method="post">
+                {% csrf_token %}
+                {% load widget_tweaks %}
+                <!-- Content -->
+                <div class="mb-3">
+                    <div class="alert alert-info" role="alert">
+                        You're logged in as <b>{{ request.user.username }}</b>.
+                    </div>
+                    <label for="id_content" class="form-label">Your comment</label>
+                    {% render_field form.content class="form-control" %}
+                </div>
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <!-- Bootstrap alert -->
+        <div class="alert alert-danger" role="alert">
+            You need to be logged in to comment. Click <a href="{% url 'editor:login' %}">here</a> to login.
+        </div>
+    {% endif %}
+</div> 
