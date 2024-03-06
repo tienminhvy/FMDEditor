@@ -4,7 +4,7 @@
 
     <div class="container mt-3 mb-5 pb-5">
         <div class="col">
-            {% if post.author is request.user %}
+            {% if post.author == request.user %}
                 <form action="{% url 'editor:post.update' post.pk %}" method="POST">
                     {% csrf_token %}
                     {% if form %}
@@ -18,7 +18,7 @@
                             </div>
                         {% endif %}
                         {% load widget_tweaks %}
-                        <h2>Update post</h2>
+                        <h2>Update post <a href="{% url 'editor:post.view' post.slug %}" class="btn btn-primary">View post</a></h2>
                         <div class="mb-3">
                             <label for="id_title" class="form-label">Title</label>
                             {% render_field form.title class="form-control" %}
@@ -64,7 +64,7 @@
             {% else %}
                 <div class="alert alert-danger" role="alert">
                     You don't have permission to update this post. Only this post's author can update their post.
-                    <a href="{% url 'editor:post.view' post.slug %}" class="btn btn-info">Go back to post view</a>
+                    <a href="{% url 'editor:post.view' post.slug %}" class="btn btn-primary">Go back to post view</a>
                 </div>
             {% endif%}
         </div>

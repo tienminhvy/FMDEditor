@@ -9,6 +9,10 @@
                         <abbr title="Updated at {{ post.updated_date }}">First created at {{ post.pub_date }}</abbr>
                         -
                         by {{ post.author }}
+                        {% if request.user == post.author %}
+                            <a href="{% url 'editor:post.update' post.slug %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'editor:post.delete' post.slug %}" class="btn btn-danger">Delete</a>
+                        {% endif %}
                     </p>
                     <hr>
                     <article>
