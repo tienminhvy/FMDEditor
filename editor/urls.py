@@ -17,8 +17,8 @@ urlpatterns = [
     path("post/delete/<slug:slug>/", views.PostDeleteView.as_view(), name="post.delete"),
 
     # Comment section
-    path("post/<slug:slug>/comment/create/", views.CommentCreate.as_view(), name="comment.create"),
-    path("post/<slug:slug>/comment/delete/<int:pk>/", views.CommentDelete.as_view(), name="comment.delete"),
+    path("post/view/<slug:slug>/comment/create/", views.CommentCreate.as_view(), name="comment.create"),
+    path("post/view/<slug:slug>/comment/delete/<int:pk>/", views.CommentDelete.as_view(), name="comment.delete"),
 
     # User section
     path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
