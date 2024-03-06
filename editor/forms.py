@@ -2,7 +2,7 @@ from typing import Any
 from django import forms
 from django.contrib.auth import authenticate
 
-from .models import Post
+from .models import Post, Comment
 
 
 class LoginForm(forms.Form):
@@ -34,3 +34,9 @@ class PostForm(forms.ModelForm):
                   'keyword',
                   'pub_date']
         exclude = ['author']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        exclude = ['post', 'author']
