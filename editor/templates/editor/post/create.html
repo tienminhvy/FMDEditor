@@ -85,4 +85,11 @@
             })
         })
     </script>
+    <script type="module">
+        import slug from 'https://cdn.jsdelivr.net/npm/slug@8.2.3/+esm';
+
+        document.querySelector('#id_title').addEventListener('focusout', e => {
+            document.querySelector('#id_slug').value = slug(document.querySelector('#id_title').value);
+        })
+    </script>
 {% include '../partials/foot.html' %}
