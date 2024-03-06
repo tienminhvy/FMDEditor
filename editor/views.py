@@ -4,7 +4,7 @@ from django.forms import BaseModelForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 from django.views import generic
 
@@ -32,7 +32,7 @@ class PostIndexView(generic.ListView):
         return Post.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
     
 class PostView(generic.DetailView):
-    template_name = 'editor/detail.html'
+    template_name = 'editor/post/read.html'
     model = Post
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
