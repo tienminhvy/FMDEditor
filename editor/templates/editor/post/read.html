@@ -26,8 +26,11 @@
                     </section>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-12">
+                    <hr class="d-lg-none">
                     <section id="comments">
                         <h2>Comments</h2>
+                        {% include '../comment/create.html' %}
+                        {% include '../comment/list.html' %}
                     </section>
                 </div>
             </div>
