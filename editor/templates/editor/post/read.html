@@ -1,5 +1,7 @@
 {% include '../partials/head.html' %}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
     <div class="container mt-5 mb-5">
         {% if post %}
             <div class="row">
@@ -15,8 +17,9 @@
                         {% endif %}
                     </p>
                     <hr>
+                    <input type="hidden" value="{{ post.content }}" id="post_content">
                     <article>
-                        {{ post.content }}
+                        
                     </article>
                     <section id="author">
                         <h2>{{ post.author.name }}</h2>
@@ -32,5 +35,27 @@
             <p>Post not found</p>
         {% endif %}
     </div>
+
+    <script type="module">
+        import { Marked } from 'https://cdn.jsdelivr.net/npm/marked@12.0.0/+esm';
+        import { markedHighlight } from 'https://cdn.jsdelivr.net/npm/marked-highlight@2.1.1/+esm'
+        import dompurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.0.9/+esm';
+        import hljs from 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/+esm'
+
+        const marked = new Marked(
+            markedHighlight({
+                langPrefix: 'hljs language-',
+                highlight(code, lang, info) {
+                    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                    return hljs.highlight(code, { language }).value;
+                }
+            })
+        );
+
+        const DOMPurify = dompurify;
+
+        const content = document.querySelector('#post_content').value;
+        document.querySelector('article').innerHTML = DOMPurify.sanitize(marked.parse(content));
+    </script>
 
 {% include '../partials/foot.html' %}
