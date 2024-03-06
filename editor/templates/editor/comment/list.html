@@ -1,8 +1,19 @@
 <div class="comments_list">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     {% for comment in post.comments.all reversed %}
         <div class="card mb-3">
             <div class="card-body">
-                <h6 class="card-title">By {{ comment.user.username }} - {{ comment.created_date }}</h6>
+                <h6 class="card-title">By {{ comment.user.username }} - {{ comment.created_date }}
+                    {% if comment.user == request.user %}
+                        <a href="{% url 'editor:comment.delete' post.slug comment.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                </h6>
                 <p class="card-text">{{ comment.content }}</p>
             </div>
         </div>

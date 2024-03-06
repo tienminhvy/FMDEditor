@@ -102,7 +102,28 @@ class CommentCreate(LoginRequiredMixin, generic.CreateView):
         comment.user = self.request.user
         comment.post = Post.objects.get(slug=self.kwargs["slug"])
         comment.save()
+        messages.success(self.request, mark_safe('Comment submitted successfully.'))
         return super().form_valid(form)
+    
+class CommentDelete(LoginRequiredMixin, generic.DeleteView):
+    template_name = ''
+    form_class = CommentForm
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+    success_url = '/post/'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        comment = Comment.objects.get(id=self.kwargs["pk"])
+        # if comment not found
+        if comment is None:
+            messages.error(self.request, mark_safe('Comment not found.'))
+        if comment.user == self.request.user:
+            comment.delete()
+            messages.success(self.request, mark_safe('Comment deleted successfully. '))
+        else:
+            messages.error(self.request, mark_safe('You can only delete your own comments.'))
+
+        return HttpResponseRedirect(reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]}))
 
 # For login
 
