@@ -70,7 +70,7 @@ class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = '/post/update/'
 
     def get_success_url(self) -> str:
-        return super().get_success_url() + str(self.kwargs["slug"])
+        return reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]})
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         post = form.save(commit=False)
@@ -104,7 +104,7 @@ class CommentCreate(LoginRequiredMixin, generic.CreateView):
         return HttpResponseRedirect(reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]}))
 
     def get_success_url(self) -> str:
-        return super().get_success_url() + str(self.kwargs["slug"])
+        return reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]})
     
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
