@@ -22,6 +22,14 @@ from .forms import *
 def index(request):
     return render(request, 'editor/index.html')
 
+# Handling errors
+
+def error404(request):
+    return render(request, 'editor/errors/404.html')
+
+def error403(request):
+    return render(request, 'editor/errors/403.html')
+
 # Post section
 
 class PostIndexView(generic.ListView):
@@ -37,7 +45,9 @@ class PostView(FormMixin, generic.DetailView):
     model = Post
     form_class = CommentForm
 
-class PostCreateView(LoginRequiredMixin, generic.CreateView):
+class PostCreateView(PermissionRequiredMixin , LoginRequiredMixin, generic.CreateView):
+    permission_required = ["editor.add_post", "is_staff"]
+
     template_name = 'editor/post/create.html'
     form_class = PostForm
     login_url = '/login/'

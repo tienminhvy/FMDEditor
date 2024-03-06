@@ -13,7 +13,7 @@ urlpatterns = [
     path("post/", views.PostIndexView.as_view(), name="post.list"),
     path("post/create/", views.PostCreateView.as_view(), name="post.create"),
     path("post/update/<slug:slug>/", views.PostUpdateView.as_view(), name="post.update"),
-    path("post/<slug:slug>/", views.PostView.as_view(), name="post.view"),
+    path("post/view/<slug:slug>/", views.PostView.as_view(), name="post.view"),
     path("post/delete/<slug:slug>/", views.PostDeleteView.as_view(), name="post.delete"),
 
     # Comment section
