@@ -5,6 +5,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic.edit import FormMixin
 from django.contrib import messages
 from django.views import generic
 
@@ -31,9 +32,10 @@ class PostIndexView(generic.ListView):
         # get queryset of posts which method was_published_recently is True
         return Post.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
     
-class PostView(generic.DetailView):
+class PostView(FormMixin, generic.DetailView):
     template_name = 'editor/post/read.html'
     model = Post
+    form_class = CommentForm
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = 'editor/post/create.html'
@@ -76,6 +78,30 @@ class PostDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         messages.success(self.request, mark_safe('Post deleted successfully. '))
+        return super().form_valid(form)
+
+
+# For comments
+    
+class CommentCreate(LoginRequiredMixin, generic.CreateView):
+    template_name = ''
+    form_class = CommentForm
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+    success_url = '/post/'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        return HttpResponseRedirect(reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]}))
+
+    def get_success_url(self) -> str:
+        return super().get_success_url() + str(self.kwargs["slug"])
+    
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        comment = form.save(commit=False)
+        comment.user = self.request.user
+        comment.post = Post.objects.get(slug=self.kwargs["slug"])
+        comment.save()
         return super().form_valid(form)
 
 # For login

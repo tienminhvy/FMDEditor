@@ -16,6 +16,9 @@ urlpatterns = [
     path("post/<slug:slug>/", views.PostView.as_view(), name="post.view"),
     path("post/delete/<slug:slug>/", views.PostDeleteView.as_view(), name="post.delete"),
 
+    # Comment section
+    path("post/<slug:slug>/comment/create/", views.CommentCreate.as_view(), name="comment.create"),
+
     # User section
     path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
 ]
