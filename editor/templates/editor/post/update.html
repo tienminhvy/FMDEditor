@@ -5,7 +5,7 @@
     <div class="container mt-3 mb-5 pb-5">
         <div class="col">
             {% if post.author == request.user %}
-                <form action="{% url 'editor:post.update' post.pk %}" method="POST">
+                <form action="{% url 'editor:post.update' post.slug %}" method="POST">
                     {% csrf_token %}
                     {% if form %}
                         {% if messages %}
