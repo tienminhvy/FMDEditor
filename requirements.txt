@@ -1,3 +1,4 @@
 django
 django-widget-tweaks
 channels[daphne]
+channels_redis
