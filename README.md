@@ -6,7 +6,7 @@ A web app for managing Markdown posts using Django. FMDEditor stands for Fast Ma
 ## Prerequisites
 - [Python>=3.12.2](https://www.python.org/downloads/)
 - WSL (Or Cmder) is installed
-- Redis (Using docker or [laragon](https://laragon.org) WAMP)
+- Redis (Using docker or [laragon](https://laragon.org) WAMP). Laragon and Redis service is turned on.
 
 # Installation
 0. Ensure that you already have all of the items above.
