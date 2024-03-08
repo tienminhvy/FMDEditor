@@ -218,3 +218,11 @@ class UserProfileView(LoginRequiredMixin, generic.TemplateView):
     
     def get_queryset(self):
         return self.request.user
+    
+# Chat section
+    
+def chat(request):
+    return render(request, 'editor/chat/index.html')
+
+def room(request, room_name):
+    return render(request, "editor/chat/room.html", {"room_name": room_name})

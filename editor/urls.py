@@ -22,4 +22,8 @@ urlpatterns = [
 
     # User section
     path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
+
+    # Chat section
+    path('chat/', views.chat, name='chat'),
+    path("chat/<str:room_name>/", views.room, name="room"),
 ]

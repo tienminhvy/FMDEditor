@@ -27,10 +27,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# ASGI
 
+ASGI_APPLICATION = "fmdeditor.asgi.application"
+
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'editor.apps.EditorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
