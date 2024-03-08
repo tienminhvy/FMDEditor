@@ -45,6 +45,10 @@ class PostView(FormMixin, generic.DetailView):
     model = Post
     form_class = CommentForm
 
+class PostCommentsView(generic.DetailView):
+    template_name = 'editor/comment/list.html'
+    model = Post
+
 class PostCreateView(PermissionRequiredMixin , LoginRequiredMixin, generic.CreateView):
     permission_required = ["editor.add_post", "is_staff"]
 
@@ -123,16 +127,17 @@ class CommentDelete(LoginRequiredMixin, generic.DeleteView):
     success_url = '/post/'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        comment = Comment.objects.get(id=self.kwargs["pk"])
-        # if comment not found
-        if comment is None:
+        try:
+            comment = Comment.objects.get(id=self.kwargs["pk"])
+            if comment.user == self.request.user:
+                comment.delete()
+                messages.success(self.request, mark_safe('Comment deleted successfully.'))
+            else:
+                messages.error(self.request, mark_safe('You can only delete your own comments.'))
+        except:
+            # if comment not found
             messages.error(self.request, mark_safe('Comment not found.'))
-        if comment.user == self.request.user:
-            comment.delete()
-            messages.success(self.request, mark_safe('Comment deleted successfully. '))
-        else:
-            messages.error(self.request, mark_safe('You can only delete your own comments.'))
-
+        
         return HttpResponseRedirect(reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]}))
 
 # For login
