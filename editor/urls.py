@@ -22,6 +22,7 @@ urlpatterns = [
 
     # User section
     path("user/profile/", views.UserProfileView.as_view(), name="user.profile"),
+    path("user/profile/update", views.UserProfileUpdateView.as_view(), name="user.profile.update"),
 
     # Chat section
     path('chat/', views.chat, name='chat'),

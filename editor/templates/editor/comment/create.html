@@ -18,7 +18,7 @@
     {% else %}
         <!-- Bootstrap alert -->
         <div class="alert alert-danger" role="alert">
-            You need to be logged in to comment. Click <a href="{% url 'editor:login' %}">here</a> to login.
+            You need to be logged in to comment. Click <a href="{% url 'editor:login' %}?redirected_to={% url 'editor:post.view' post.slug %}">here</a> to login.
         </div>
     {% endif %}
 </div> 

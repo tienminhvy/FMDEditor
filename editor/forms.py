@@ -1,6 +1,7 @@
 from typing import Any
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from .models import Post, Comment
 
@@ -35,6 +36,16 @@ class PostForm(forms.ModelForm):
                   'pub_date']
         exclude = ['author']
 
+class UserForm(forms.ModelForm):
+    curr_password = forms.CharField(label="Password", widget=forms.PasswordInput(), required=False)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput(), required=False)
+    c_password = forms.CharField(label="Confirm password", widget=forms.PasswordInput(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['email']
+        exclude = ['username']
+    
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

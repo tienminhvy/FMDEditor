@@ -70,7 +70,7 @@
             'ws://'
             + window.location.host
             + '/ws/comments/'
-            + '{{ post.slug }}/'
+            + '{{ post.slug }}'
         );
 
         commentSocket.onclose = function(e) {

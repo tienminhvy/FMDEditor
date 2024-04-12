@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -51,7 +52,6 @@ class PostCommentsView(generic.DetailView):
 
 class PostCreateView(PermissionRequiredMixin , LoginRequiredMixin, generic.CreateView):
     permission_required = ["editor.add_post", "is_staff"]
-
     template_name = 'editor/post/create.html'
     form_class = PostForm
     login_url = '/login/'
@@ -223,6 +223,56 @@ class UserProfileView(LoginRequiredMixin, generic.TemplateView):
     
     def get_queryset(self):
         return self.request.user
+    
+class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    login_url = '/login/'
+    redirect_field_name = 'redirected_to'
+    template_name = "editor/user/update.html"
+    model = User
+    form_class = UserForm
+    success_url = '/user/profile/update'
+
+    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+        return self.request.user
+    
+    def get_queryset(self):
+        return self.request.user
+    
+    def form_valid(self, form: UserForm) -> HttpResponse:
+
+        if self.request.GET.get('type') == 'password':
+            form.cleaned_data['email'] = self.request.user.email
+            user = form.save(commit=False)
+
+            # User failed to authenticate
+            if not authenticate(username=self.request.user.username, password=form.cleaned_data['curr_password']):
+                form.add_error(field="curr_password", error="Wrong current password")
+                return super().form_invalid(form)
+
+            # Password and confirm password do not match
+            if form.cleaned_data['password'] != form.cleaned_data['c_password']:
+                form.add_error(field="c_password", error="New password and confirm new password fields do not match")
+                return super().form_invalid(form)
+
+            # If everything works
+            user.set_password(form.cleaned_data['password'])
+            login(self.request, user)
+            # Success message
+            messages.success(self.request, mark_safe('Information updated successfully'))
+            user.save()
+        else:
+            user = form.save(commit=False)
+
+            # User failed to authenticate
+            if not authenticate(username=self.request.user.username, password=form.cleaned_data['curr_password']):
+                form.add_error(field="curr_password", error="Wrong current password")
+                return super().form_invalid(form)
+            
+            # Success message
+            messages.success(self.request, mark_safe('Information updated successfully'))
+            user.save()
+
+        return super().form_valid(form)
     
 # Chat section
     

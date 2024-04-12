@@ -1,0 +1,74 @@
+{% include '../partials/head.html' %}
+    <!-- A user profile page with bootstrap 5 -->
+
+    <div class="container mt-3 mb-5 pb-5">
+        <div class="col">
+            <h2>Your profile <a href="{% url 'editor:user.profile' %}" class="btn btn-primary">View</a></h2>
+            {% if error or form.errors %}
+                <div class="mb-3">
+                    <div class="alert alert-danger" role="alert">
+                        {% for field, errors in form.errors.items %}
+                            <ul class="m-0">
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if messages %}
+                <div class="mb-3">
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form action="{% url 'editor:user.profile.update' %}" method="POST">
+                {% csrf_token %}
+                {% if form %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input readonly disabled type="text" class="form-control disabled" id="username" value="{{ user.username }}">
+                    </div>
+                    {% load widget_tweaks %}
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        {% render_field form.email class="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_curr_password" class="form-label">Current Password</label>
+                        {% render_field form.curr_password class="form-control" %}
+                    </div>
+                    {% render_field form.c_password type="hidden" %}
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div class="p-2"></div>
+            <h3>Update password</h3>
+            <form action="{% url 'editor:user.profile.update' %}?type=password" method="POST">
+                {% csrf_token %}
+                {% if form %}
+                    <input type="hidden" class="form-control disabled" name="email" value="{{ user.email }}">
+                    {% load widget_tweaks %}
+                    <div class="mb-3">
+                        <label for="id_curr_password" class="form-label">Current Password</label>
+                        {% render_field form.curr_password class="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Password</label>
+                        {% render_field form.password class="form-control" %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Confirm Password</label>
+                        {% render_field form.c_password class="form-control" type="password"|attr:"required" %}
+                    </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% include '../partials/foot.html' %}

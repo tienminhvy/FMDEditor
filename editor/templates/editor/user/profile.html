@@ -6,12 +6,13 @@
             <h2>Your profile</h2>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input readonly name="username" type="text" class="form-control" id="username" value="{{ user.username }}">
+                <input readonly disabled type="text" class="form-control disabled" id="username" value="{{ user.username }}">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input readonly name="username" type="text" class="form-control" id="username" value="{{ user.email }}">
+                <input readonly disabled type="text" class="form-control disabled" id="username" value="{{ user.email }}">
             </div>
+            <a href="{% url 'editor:user.profile.update' %}" class="btn btn-primary">Update your profile</a>
         </div>
     </div>
 
