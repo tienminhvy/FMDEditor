@@ -16,6 +16,20 @@
                             <a href="{% url 'editor:post.delete' post.slug %}" class="btn btn-danger">Delete</a>
                         {% endif %}
                     </p>
+                    <!-- Post keywords to bootstrap badge -->
+                    <div class="keywords">
+                        <p>
+                            Keywords: 
+                            {% for keyword in keywords %}
+                                <a href='{% url "editor:index" %}?q=[{"value": "{{ keyword }}"}]' type="button" class="btn btn-primary btn-sm">
+                                    {{ keyword }}
+                                </a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <script>
+
+                    </script>
                     <hr>
                     <input type="hidden" value="{{ post.content }}" id="post_content">
                     <article>

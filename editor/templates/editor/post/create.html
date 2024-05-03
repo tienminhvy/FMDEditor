@@ -1,6 +1,10 @@
 {% include '../partials/head.html' %}
 
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
     <div class="container mt-3 mb-5 pb-5">
         <div class="col">
@@ -97,6 +101,7 @@
         });
 
     </script>
+
     <script type="module">
         import slug from 'https://cdn.jsdelivr.net/npm/slug@8.2.3/+esm';
 
@@ -107,5 +112,14 @@
             if (document.querySelector('#id_slug').value.length == 0)
                 document.querySelector('#id_slug').value = slug(document.querySelector('#id_title').value);
         })
+    </script>
+
+    <script>
+        let keywordsField = document.querySelector('#id_keyword') // the 'input' element which will be transformed into a Tagify component
+        let tagify = new Tagify(keywordsField, {
+        // A list of possible tags. This setting is optional if you want to allow
+        // any possible tag to be added without suggesting any to the user.
+        // whitelist: ['foo', 'bar', 'and baz', 0, 1, 2]
+        });
     </script>
 {% include '../partials/foot.html' %}

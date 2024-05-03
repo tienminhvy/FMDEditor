@@ -16,8 +16,10 @@ from .models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from .forms import *
-import re
+import re, json
 from django.core.validators import validate_slug
+
+from django.utils.safestring import SafeString
 
 # Create your views here.
 
@@ -38,15 +40,45 @@ def error403(request):
 class PostIndexView(generic.ListView):
     template_name = 'editor/index.html'
     context_object_name = 'posts'
+    model = Post
+    paginate_by = 5
 
     def get_queryset(self):
+        request = self.request
+        query = request.GET.get('q', '')
+        if query != '':
+            queryDict = json.loads(query)
+            collection = Post.objects.filter(keyword__contains="")
+            for i in queryDict:
+                keyword = i.get('value')
+                collection = collection.filter(keyword__contains=keyword)
+            return collection.order_by('-pub_date')[:5]
         # get queryset of posts which method was_published_recently is True
         return Post.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
     
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        data = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+        data["query"] = query
+        return data
+
 class PostView(FormMixin, generic.DetailView):
     template_name = 'editor/post/read.html'
     model = Post
     form_class = CommentForm
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        data = super().get_context_data(**kwargs)
+        post = self.get_object()
+        
+        keywords = json.loads(post.keyword)
+        keywordsList = list()
+        
+        for keyword in keywords:
+            keywordsList.append(keyword.get('value'))
+            
+        data["keywords"] = keywordsList
+        return data
 
 class PostCommentsView(generic.DetailView):
     template_name = 'editor/comment/list.html'
