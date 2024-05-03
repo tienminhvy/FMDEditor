@@ -52,7 +52,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'django_extensions',
 ]
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
+
+GRAPH_MODELS = {
+  'app_labels': ["editor", "auth"],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

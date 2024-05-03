@@ -44,7 +44,11 @@
                     </div>
                     <!-- Content -->
                     <div class="mb-3">
-                        <label for="editor" class="form-label">Content</label>
+                        <label for="editor" class="form-label"><h3>Content</h3></label>
+                        <div class="mb-3">
+                            <label for="id_file">Import from file: </label>
+                            <input class="form-control" id="id_file" type="file" placeholder="Import from file">
+                        </div>
                         <div id="editor"></div>
                         <input type="hidden" name="content" value="{{ form.content.value | default_if_none:'' }}">
                     </div>
@@ -67,23 +71,31 @@
 
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const Editor = toastui.Editor;
+        
+        const Editor = toastui.Editor;
 
-            const editor = new Editor({
-                el: document.querySelector('#editor'),
-                height: '500px',
-                initialValue: document.querySelector("form input[name='content']").value,
-                initialEditType: 'wysiwyg',
-                previewStyle: 'vertical'
-            });
+        const editor = new Editor({
+            el: document.querySelector('#editor'),
+            height: '500px',
+            initialValue: document.querySelector("form input[name='content']").value,
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical'
+        });
 
-            document.querySelector("form").addEventListener('submit', e => {
-                e.preventDefault();
-                document.querySelector("form input[name='content']").value = editor.getMarkdown();
-                document.querySelector("form").submit();
-            })
+        document.querySelector("form").addEventListener('submit', e => {
+            e.preventDefault();
+            document.querySelector("form input[name='content']").value = editor.getMarkdown();
+            document.querySelector("form").submit();
         })
+
+        document.querySelector('#id_file').addEventListener('change', async (event) => {
+            const file = event.target.files.item(0)
+            const rawStr = await file.text()
+            const encodedStr = rawStr.replace(/[\u00A0-\u9999<>\&]/g, i => '&#'+i.charCodeAt(0)+';')
+            
+            editor.setMarkdown(encodedStr)
+        });
+
     </script>
     <script type="module">
         import slug from 'https://cdn.jsdelivr.net/npm/slug@8.2.3/+esm';
