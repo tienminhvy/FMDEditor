@@ -25,7 +25,7 @@
                         </div>
                         <!-- Slug -->
                         <div class="mb-3">
-                            <label for="id_slug" class="form-label">Slug</label>
+                            <label for="id_slug" class="form-label">Slug (Leave it empty to generate a new one)</label>
                             {% render_field form.slug class="form-control"%}
                         </div>
                         <!-- Description -->
@@ -88,6 +88,20 @@
                 document.querySelector("form input[name='content']").value = editor.getMarkdown();
                 document.querySelector("form").submit();
             })
+        })
+    </script>
+
+    <script type="module">
+        import slug from 'https://cdn.jsdelivr.net/npm/slug@8.2.3/+esm';
+
+        document.querySelector('#id_title').addEventListener('focusout', e => {
+            if (document.querySelector('#id_slug').value.length == 0)
+                document.querySelector('#id_slug').value = slug(document.querySelector('#id_title').value);
+        })
+        
+        document.querySelector('#id_slug').addEventListener('focusout', e => {
+            if (document.querySelector('#id_slug').value.length == 0)
+                document.querySelector('#id_slug').value = slug(document.querySelector('#id_title').value);
         })
     </script>
 {% include '../partials/foot.html' %}

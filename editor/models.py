@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import validate_slug
 
 # Create your models here.
 
@@ -10,7 +11,7 @@ from django.utils import timezone
 class Post(models.Model):
     title = models.CharField(max_length=100)
     #  slug must be unique
-    slug = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, validators=[validate_slug])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=100)
     content = models.TextField()

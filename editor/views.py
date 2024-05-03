@@ -16,6 +16,8 @@ from .models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from .forms import *
+import re
+from django.core.validators import validate_slug
 
 # Create your views here.
 
@@ -72,10 +74,10 @@ class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
     redirect_field_name = 'redirected_to'
     model = Post
     success_url = '/post/update/'
-
-    def get_success_url(self) -> str:
-        return reverse('editor:post.view', kwargs={'slug': self.kwargs["slug"]})
     
+    def get_success_url(self) -> str:
+        return reverse('editor:post.view', kwargs={'slug': self.object.slug})
+
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         post = form.save(commit=False)
         post.author = self.request.user
