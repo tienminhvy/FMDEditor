@@ -8,7 +8,7 @@
                 <div class="col col-lg-8 col-md-8 col-sm-12">
                     <h2>{{ post.title }}</h2>
                     <p>
-                        <abbr title="Updated at {{ post.updated_date }}">First created at {{ post.pub_date }}</abbr>
+                        <abbr title="Updated at {{ post.updated_date }}">Published at {{ post.pub_date }}</abbr>
                         -
                         by {{ post.author }}
                         {% if request.user == post.author %}
@@ -75,6 +75,26 @@
 
         const content = document.querySelector('#post_content').value;
         document.querySelector('article').innerHTML = DOMPurify.sanitize(marked.parse(content));
+    </script>
+
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        let mermaidList = document.querySelectorAll('pre:has(.language-mermaid)')
+
+        for (let i = 0; i < mermaidList.length; i++) {
+            const parent = mermaidList[i];
+            const element = mermaidList[i].querySelector('.language-mermaid');
+
+            parent.innerHTML = element.innerHTML
+            parent.setAttribute('class', 'mermaid')
+            parent.setAttribute('style', 'text-align: center;')
+        }
+        mermaid.initialize({ startOnLoad: false });
+        await mermaid.run({
+            suppressErrors: true,
+            nodes: document.querySelectorAll('.mermaid'),
+        });
     </script>
 
     <script type="module">

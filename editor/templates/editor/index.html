@@ -20,7 +20,7 @@
                     {% for post in page_obj %}
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h4 class="card-title">{{ post.title }}</h4>
+                                    <h4 class="card-title">{{ post.title }} <span class="badge bg-success">{{ post.pub_date }}</span></h4>
                                     <p class="card-text">{{ post.description }}</p>
                                     <a class="stretched-link btn btn-primary text-white" href="{% url 'editor:post.view' post.slug %}">View more</a>
                                 </div>
