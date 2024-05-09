@@ -1,6 +1,10 @@
 # FMDEditor
 A web app for managing Markdown posts using Django. FMDEditor stands for Fast MarkDown Editor.
 
+# OSSD report
+
+[Click here](https://github.com/tienminhvy/FMDEditor/blob/main/OSSD_Report.pdf)
+
 # Requirement
 
 ## Prerequisites
@@ -34,6 +38,8 @@ python manage.py runserver
 6. Now enter 127.0.0.1:8000 to your browser's address bar to see the magic.
 
 # Documentation
+
+Under development
 
 # Issues, Bugs & Feature Requests
 
